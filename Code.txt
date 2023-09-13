@@ -1,0 +1,95 @@
+/*Code App Web Google sheet form - cập nhật bảng dữ liệu lên web*/
+
+/*CODE.GS----------------------*/
+function doGet(request) {
+  return HtmlService.createTemplateFromFile('Index').evaluate();
+}
+
+/* DEFINE GLOBAL VARIABLES, CHANGE THESE VARIABLES TO MATCH WITH YOUR SHEET */
+function globalVariables(){ 
+  var varArray = {
+    spreadsheetId   : '1mchumEtFTUms_zAyy7L6YU2llUH2k6gP7XCRMxGAt2w', //** CHANGE !!!
+    dataRage        : 'Data!A2:E',                                    //** CHANGE !!!   
+    lastCol         : 'E',                                            //** CHANGE !!!
+    insertRange     : 'Data!A1:E1',                                   //** CHANGE !!!
+    sheetID         : '0'                                             //** CHANGE !!! 
+  };
+  return varArray;
+}
+
+
+/* PROCESS FORM */
+function processForm(formObject){    
+    appendData(getFormValues(formObject),globalVariables().spreadsheetId,globalVariables().insertRange); //Append Form Data
+    return getLastTenRows();//Return last 10 rows
+}
+
+
+/* GET FORM VALUES AS AN ARRAY */
+function getFormValues(formObject){
+/* ADD OR REMOVE VARIABLES ACCORDING TO YOUR FORM*/  
+    var values = [[
+                  formObject.full_name,
+                  formObject.gender,
+                  formObject.dateOfBirth,
+                  formObject.email,
+                  formObject.phone]];  
+  return values;
+}
+
+/*
+## CURD FUNCTIONS ----------------------------------------------------------------------------------------
+*/
+
+
+/* CREATE/ APPEND DATA */
+function appendData(values, spreadsheetId,range){
+  var valueRange = Sheets.newRowData();
+  valueRange.values = values;
+  var appendRequest = Sheets.newAppendCellsRequest();
+  appendRequest.sheetID = spreadsheetId;
+  appendRequest.rows = valueRange;
+  var results = Sheets.Spreadsheets.Values.append(valueRange, spreadsheetId, range,{valueInputOption: "RAW"});
+}
+
+
+/* READ DATA */
+function readData(spreadsheetId,range){
+  var result = Sheets.Spreadsheets.Values.get(spreadsheetId, range);
+  return result.values;
+}
+
+/* 
+## HELPER FUNCTIONS FOR CRUD OPERATIONS --------------------------------------------------------------
+*/
+
+/*GET LAST 10 RECORDS */
+function getLastTenRows(){
+  var lastRow = readData(globalVariables().spreadsheetId,globalVariables().dataRage).length+1;
+  if(lastRow<=11){
+    var range = globalVariables().dataRage;
+  }else{
+    var range = 'Data!A'+(lastRow-9)+':'+globalVariables().lastCol;
+  }
+  var lastTenRows = readData(globalVariables().spreadsheetId,range);
+  return lastTenRows;
+}
+
+
+/* GET ALL RECORDS */
+function getAllData(){
+  var data = readData(globalVariables().spreadsheetId,globalVariables().dataRage);
+  return data;
+}
+
+
+/*
+## OTHER HELPERS FUNCTIONS ------------------------------------------------------------------------
+*/
+
+
+/* INCLUDE HTML PARTS, EG. JAVASCRIPT, CSS, OTHER HTML FILES */
+function include(filename) {
+  return HtmlService.createHtmlOutputFromFile(filename)
+      .getContent();
+}

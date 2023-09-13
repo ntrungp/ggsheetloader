@@ -1,0 +1,41 @@
+<form id="myForm" class="p-2 border border-light rounded bg-light" onsubmit="handleFormSubmit(this)"> <!-- Call JavaScript function "handleFormSubmit" -->
+    <p class="h4 mb-4 text-center" style="color:red">NHẬP THÔNG TIN</p>
+    
+	<div class="form-group">
+		<label for="name" >Họ và tên</label>
+		<input type="text" class="form-control" id="full_name" name="full_name" placeholder="Điền họ và tên" required>
+	</div>
+
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<p>Giới tính</p>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="gender" id="male" value="Nam">
+				<label class="form-check-label" for="male">Nam</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="gender" id="female" value="Nữ">
+				<label class="form-check-label" for="female">Nữ</label>
+			</div>
+		</div>
+		<div class="form-group col-md-6">
+			<label for="dateOfBirth">Ngày sinh</label>
+			<input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="email">Địa chỉ mail</label>
+		<input type="email" class="form-control" id="email" name="email" placeholder="Email">
+	</div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+          <label for="phone">Số điện thoại</label>
+          <input type="tel" class="form-control" id="phone" name="phone" placeholder="Điền số điện thoại">
+      </div>      
+    </div>
+
+	<button type="submit" class="btn btn-primary">Gửi đi</button>
+  <input class="btn btn-secondary" type="reset" value="Xóa các trường">
+</form>
